@@ -1,0 +1,41 @@
+{
+  "name": "news-api",
+  "version": "1.0.0",
+  "description": "news backend for news app mobile ",
+  "keywords": [
+    "news",
+    "api",
+    "backend",
+    "nodejs",
+    "typescript",
+    "scrape",
+    "scraping"
+  ],
+  "homepage": "https://github.com/indrafetch09/news-api-backend#readme",
+  "bugs": {
+    "url": "https://github.com/indrafetch09/news-api-backend/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/indrafetch09/news-api-backend.git"
+  },
+  "license": "MIT",
+  "author": "Indra",
+  "type": "commonjs",
+  "main": "index.ts",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "dependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.0.0",
+    "axios": "^1.18.0",
+    "cheerio": "^1.2.0",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "moment": "^2.30.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^6.0.3"
+  }
+}
