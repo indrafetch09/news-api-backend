@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { getData, getDetail } from "./kompas-scrape";
+import { getData, getDetail } from "./scraper/kompas-scrape";
 
 const app: express.Application = express();
 
