@@ -1,26 +1,33 @@
 import express from "express";
 import cors from "cors";
-import { getData, getDetail } from "./scraper/kompas-scrape";
+import dotenv from "dotenv";
+import mongoose from "mongoose";
+import routes from "./routes";
+
+// Load environment variables
+dotenv.config();
 
 const app: express.Application = express();
 
-const options = [
+// CORS configuration
+app.use(
   cors({
     origin: "*",
     methods: "*",
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
-  }),
-];
-
-app.use(options);
-app.use(cors());
+  })
+);
 app.use(express.json());
 
+// Main Router
+app.use("/", routes);
+
+// Welcome & API info route
 app.get("/", (_req, res) => {
   res.setHeader("Content-Type", "application/json");
   const data = {
-    message: "",
+    message: "Welcome to News Aggregator API Backend",
     api: [
       {
         name: "Kompas",
@@ -37,45 +44,28 @@ app.get("/", (_req, res) => {
           "/kompas/health",
           "/kompas/otomotif",
         ],
-        detail: "/kompas/:slug",
+        detail: "/kompas/:category/:slug",
       },
     ],
   };
-  console.log(data);
   res.json(data);
 });
 
-app.get("/kompas", async (_req, res) => {
-  const result = await getData("");
-  res.setHeader("Content-Type", "application/json");
-  if (!result) {
-    return res.status(500).json({ message: "Failed to fetch data" });
-  }
-  res.json(result);
-});
+const PORT = process.env.PORT || 3000;
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/news-api-backend";
 
-app.get("/kompas/:cat", async (req, res) => {
-  const result = await getData(req.params.cat);
-  res.setHeader("Content-Type", "application/json");
-  if (!result) {
-    return res.status(500).json({ message: "Failed to fetch data" });
-  }
-  res.json(result);
-});
-
-app.get("/kompas/:category/:slug", async (req, res) => {
-  const result = await getDetail(req.params.category, req.params.slug);
-  res.setHeader("Content-Type", "application/json");
-  if (!result) {
-    return res.status(500).json({ message: "Failed to fetch data" });
-  }
-  res.json(result);
-});
-
-const PORT = 3000;
-
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Api listening on http://0.0.0.0:${PORT}/`);
-});
+// Connect to MongoDB and start the server
+mongoose
+  .connect(MONGODB_URI)
+  .then(() => {
+    console.log("Connected to MongoDB successfully");
+    app.listen(Number(PORT), "0.0.0.0", () => {
+      console.log(`API listening on http://0.0.0.0:${PORT}/`);
+    });
+  })
+  .catch((err) => {
+    console.error("Database connection failed:", err);
+    process.exit(1);
+  });
 
 export default app;

@@ -1,48 +1,37 @@
 {
   "name": "news-api",
   "version": "1.0.0",
-  "description": "news backend for news app mobile ",
-  "keywords": [
-    "news",
-    "api",
-    "backend",
-    "nodejs",
-    "typescript",
-    "scrape",
-    "scraping"
-  ],
-  "homepage": "https://github.com/indrafetch09/news-api-backend#readme",
-  "bugs": {
-    "url": "https://github.com/indrafetch09/news-api-backend/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/indrafetch09/news-api-backend.git"
-  },
-  "license": "MIT",
-  "author": "Indra",
-  "type": "commonjs",
-  "main": "index.ts",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node dist/index.js",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "prepare": "husky"
   },
   "dependencies": {
-    "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.6",
-    "@types/node": "^26.0.0",
     "axios": "^1.18.0",
+    "bcryptjs": "^3.0.3",
     "cheerio": "^1.2.0",
     "cors": "^2.8.6",
+    "domhandler": "^6.0.1",
+    "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
     "moment": "^2.30.1",
-    "ts-node-dev": "^2.0.0"
+    "mongoose": "^9.7.1"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
-    "@types/node": "^25.9.1",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^26.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.61.1",
+    "@typescript-eslint/parser": "^8.61.1",
+    "eslint": "^10.5.0",
+    "husky": "^9.1.7",
     "ts-node-dev": "^2.0.0",
     "typescript": "^6.0.3"
   }
