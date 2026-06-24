@@ -59,9 +59,7 @@ app.get("/health", (_req: Request, res: Response) => {
 const PORT = process.env.PORT || 3000;
 
 // Connect to MongoDB and start the server
-const MONGODB_URI =
-  process.env.MONGODB_URI || "mongodb://localhost:27017/news-api-backend";
-
+const MONGODB_URI = process.env.MONGODB_URI;
 mongoose
   .connect(MONGODB_URI)
   .then(() => {
