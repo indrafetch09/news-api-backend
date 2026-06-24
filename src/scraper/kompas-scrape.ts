@@ -84,9 +84,18 @@ function extractSlug(link: string): string | null {
 }
 
 function formatTime(text: string): string {
-  const t = text.trim().replace("WIB", " ");
-  const m = moment(t, "dd/MMMM/YYYY, hh:mm");
-  return m.isValid() ? m.format("YYYY-MM-DD hh:mm") : t;
+  const t = text
+    .trim()
+    .replace("WIB", "")
+    .replace(/^[\s,:-]+/, "")
+    .trim();
+  const m = moment(t, [
+    "DD/MM/YYYY, HH:mm",
+    "DD MMMM YYYY, HH:mm",
+    "DD/MMMM/YYYY, HH:mm",
+    "dd/MMMM/YYYY, hh:mm",
+  ]);
+  return m.isValid() ? m.format("YYYY-MM-DD HH:mm") : t;
 }
 
 interface LayoutConfig {
@@ -211,53 +220,73 @@ export async function getDetail(
   slug: string,
 ): Promise<DetailArticle | null> {
   const notSubDomain = ["global", "baca"];
-  const base = notSubDomain.includes(category.toLocaleLowerCase())
-    ? [`https://${category}.kompas.com`, `https://kompas.com/${category}`]
-    : [`https://kompas.com`];
-  const url = `${base}/${slug}?page=all`;
+  const catLower = category.toLowerCase();
 
-  const { data } = await axios.get(url);
-  const $ = cheerio.load(data);
-  const _element_article = $(".container.clearfix");
+  let url: string;
+  if (!catLower || catLower === "www") {
+    url = `https://www.kompas.com/${slug}?page=all`;
+  } else if (notSubDomain.includes(catLower)) {
+    url = `https://www.kompas.com/${slug}?page=all`;
+  } else {
+    const prefix = `${catLower}/`;
+    const cleanSlug = slug.startsWith(prefix)
+      ? slug.slice(prefix.length)
+      : slug;
+    url = `https://${catLower}.kompas.com/${cleanSlug}?page=all`;
+  }
 
-  const title = $("h1.read__title", _element_article)
-    .text()
-    .replace("\n", "")
-    .trim();
-  const contentEl = $(".read__content", _element_article);
-  $("script", contentEl).remove();
-  const content = contentEl.text().replace("\n", "").trim();
+  let result: DetailArticle | null = null;
+  try {
+    const { data } = await axios.get(url);
+    const $ = cheerio.load(data);
 
-  const image = cleanImg(
-    $(".cover-photo img", _element_article).attr("src") ?? "",
-  );
-  const timeEl = $(".read__time", _element_article);
-  const rawTime = timeEl.text().trim().replace("WIB", "").replace("-", "");
-  const time = formatTime(rawTime);
+    const _element_article = $(".container.clearfix");
+    const title = $("h1.read__title", _element_article);
+    const content = $(".read__content", _element_article);
+    $("script", content).remove();
 
-  const media: { type: string; url: string }[] = [];
+    const image = cleanImg($(".cover-photo img", _element_article).attr("src"));
+    const timeEl = $(".read__time", _element_article);
+    $("a", timeEl).remove();
+    const rawTime = timeEl.text().trim().replace("WIB", "").replace("-", "");
+    const time = formatTime(rawTime);
 
-  $("iframe", contentEl).each((_, elem) => {
-    media.push({ type: "embed", url: $(elem).attr("src") ?? "" });
-  });
+    const media: { type: string; url: string }[] = [];
 
-  $("img", contentEl).each((_, elem) => {
-    if ($(elem).closest(".lihatjg").length <= 0) {
-      media.push({ type: "image", url: $(elem).attr("src") ?? "" });
-    }
-  });
+    $("iframe", content).each((_, elem) => {
+      media.push({
+        type: "embed",
+        url: $(elem).attr("src") ?? "",
+      });
+    });
 
-  $("article", contentEl).each((_, elem) => {
-    media.push({ type: "article", url: $("a", elem).attr("href") ?? "" });
-  });
+    $("img", content).each((_, elem) => {
+      if ($(elem).closest(".lihatjg").length <= 0) {
+        media.push({
+          type: "image",
+          url: $(elem).attr("src") ?? "",
+        });
+      }
+    });
 
-  return {
-    title,
-    content,
-    image,
-    time,
-    media,
-  };
+    $("article", content).each((_, elem) => {
+      media.push({
+        type: "article",
+        url: $("a", elem).attr("href") ?? "",
+      });
+    });
+
+    result = {
+      title: title.text().replace("\n", "").trim(),
+      content: content.text().replace("\n", "").trim(),
+      image: image,
+      time: time,
+      media: media,
+    };
+  } catch (error) {
+    console.error(error);
+  }
+  return result;
 }
 
 export default { getData: getData, getDetail: getDetail };
