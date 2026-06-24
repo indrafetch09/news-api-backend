@@ -36,11 +36,9 @@ export const getKompasNewsDetail = async (req: Request, res: Response) => {
   try {
     const { category, slug } = req.params;
     if (typeof category !== "string" || typeof slug !== "string") {
-      return res
-        .status(400)
-        .json({
-          message: "Category and slug are required and must be strings",
-        });
+      return res.status(400).json({
+        message: "Category and slug are required and must be strings",
+      });
     }
     const result = await getDetail(category, slug);
     res.setHeader("Content-Type", "application/json");
