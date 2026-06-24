@@ -61,7 +61,7 @@ const PORT = process.env.PORT || 3000;
 // Connect to MongoDB and start the server
 const MONGODB_URI = process.env.MONGODB_URI;
 mongoose
-  .connect(MONGODB_URI)
+  .connect(`${MONGODB_URI}`)
   .then(() => {
     console.log("Connected to MongoDB successfully");
   })

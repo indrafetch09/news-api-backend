@@ -2,11 +2,11 @@ import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { User } from "../models/User";
 
-const JWT_SECRET = process.env.JWT_SECRET || "supersecretjwtkey";
+const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRES_IN = "30d"; // 30 days expiration for mobile session
 
 const generateToken = (userId: string): string => {
-  return jwt.sign({ userId }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+  return jwt.sign({ userId }, `${JWT_SECRET}`, { expiresIn: JWT_EXPIRES_IN });
 };
 
 export const register = async (req: Request, res: Response) => {
@@ -14,7 +14,9 @@ export const register = async (req: Request, res: Response) => {
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
-      return res.status(400).json({ message: "Name, email, and password are required" });
+      return res
+        .status(400)
+        .json({ message: "Name, email, and password are required" });
     }
 
     const existingUser = await User.findOne({ email: email.toLowerCase() });
@@ -39,7 +41,9 @@ export const register = async (req: Request, res: Response) => {
       },
     });
   } catch (error: any) {
-    return res.status(500).json({ message: error.message || "Registration failed" });
+    return res
+      .status(500)
+      .json({ message: error.message || "Registration failed" });
   }
 };
 
@@ -48,7 +52,9 @@ export const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ message: "Email and password are required" });
+      return res
+        .status(400)
+        .json({ message: "Email and password are required" });
     }
 
     const user = await User.findOne({ email: email.toLowerCase() });
