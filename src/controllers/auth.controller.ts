@@ -11,12 +11,23 @@ const generateToken = (userId: string): string => {
 
 export const register = async (req: Request, res: Response) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, confirmPassword } = req.body;
 
-    if (!name || !email || !password) {
-      return res
-        .status(400)
-        .json({ message: "Name, email, and password are required" });
+    const requiredFields = [
+      { value: name, message: "Name is required" },
+      { value: email, message: "Email is required" },
+      { value: password, message: "Password is required" },
+      { value: confirmPassword, message: "Confirm password is required" },
+    ];
+
+    for (const field of requiredFields) {
+      if (!field.value) {
+        return res.status(400).json({ message: field.message });
+      }
+    }
+
+    if (password !== confirmPassword) {
+      return res.status(400).json({ message: "Passwords do not match" });
     }
 
     const existingUser = await User.findOne({ email: email.toLowerCase() });
@@ -24,7 +35,7 @@ export const register = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Email is already registered" });
     }
 
-    const user = new User({ name, email, password });
+    const user = new User({ name, email, password, confirmPassword });
     await user.save();
 
     const token = generateToken(user._id.toString());
