@@ -7,7 +7,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "supersecretjwtkey";
 export const authenticate = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const authHeader = req.headers.authorization;

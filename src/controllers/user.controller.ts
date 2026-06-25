@@ -12,7 +12,9 @@ export const getProfile = async (req: Request, res: Response) => {
       settings: user.settings,
     });
   } catch (error: any) {
-    return res.status(500).json({ message: error.message || "Failed to get profile" });
+    return res
+      .status(500)
+      .json({ message: error.message || "Failed to get profile" });
   }
 };
 
@@ -45,7 +47,9 @@ export const updateProfile = async (req: Request, res: Response) => {
       },
     });
   } catch (error: any) {
-    return res.status(500).json({ message: error.message || "Failed to update profile" });
+    return res
+      .status(500)
+      .json({ message: error.message || "Failed to update profile" });
   }
 };
 
@@ -53,7 +57,9 @@ export const getSettings = async (req: Request, res: Response) => {
   try {
     return res.status(200).json(req.user!.settings);
   } catch (error: any) {
-    return res.status(500).json({ message: error.message || "Failed to get settings" });
+    return res
+      .status(500)
+      .json({ message: error.message || "Failed to get settings" });
   }
 };
 
@@ -63,8 +69,10 @@ export const updateSettings = async (req: Request, res: Response) => {
     const { theme, notificationsEnabled, preferredCategories } = req.body;
 
     if (theme !== undefined) user.settings.theme = theme;
-    if (notificationsEnabled !== undefined) user.settings.notificationsEnabled = notificationsEnabled;
-    if (preferredCategories !== undefined) user.settings.preferredCategories = preferredCategories;
+    if (notificationsEnabled !== undefined)
+      user.settings.notificationsEnabled = notificationsEnabled;
+    if (preferredCategories !== undefined)
+      user.settings.preferredCategories = preferredCategories;
 
     await user.save();
 
@@ -73,7 +81,9 @@ export const updateSettings = async (req: Request, res: Response) => {
       settings: user.settings,
     });
   } catch (error: any) {
-    return res.status(500).json({ message: error.message || "Failed to update settings" });
+    return res
+      .status(500)
+      .json({ message: error.message || "Failed to update settings" });
   }
 };
 
@@ -81,17 +91,24 @@ export const getBookmarks = async (req: Request, res: Response) => {
   try {
     return res.status(200).json(req.user!.bookmarks);
   } catch (error: any) {
-    return res.status(500).json({ message: error.message || "Failed to get bookmarks" });
+    return res
+      .status(500)
+      .json({ message: error.message || "Failed to get bookmarks" });
   }
 };
 
 export const addBookmark = async (req: Request, res: Response) => {
   try {
     const user = req.user!;
-    const { title, image_thumbnail, image_full, time, link, slug, category } = req.body;
+    const { title, image_thumbnail, image_full, time, link, slug, category } =
+      req.body;
 
     if (!title || !time || !link || !slug || !category) {
-      return res.status(400).json({ message: "Article title, time, link, slug, and category are required" });
+      return res
+        .status(400)
+        .json({
+          message: "Article title, time, link, slug, and category are required",
+        });
     }
 
     const isBookmarked = user.bookmarks.some((b) => b.slug === slug);
@@ -117,7 +134,9 @@ export const addBookmark = async (req: Request, res: Response) => {
       bookmarks: user.bookmarks,
     });
   } catch (error: any) {
-    return res.status(500).json({ message: error.message || "Failed to add bookmark" });
+    return res
+      .status(500)
+      .json({ message: error.message || "Failed to add bookmark" });
   }
 };
 
@@ -143,6 +162,8 @@ export const removeBookmark = async (req: Request, res: Response) => {
       bookmarks: user.bookmarks,
     });
   } catch (error: any) {
-    return res.status(500).json({ message: error.message || "Failed to remove bookmark" });
+    return res
+      .status(500)
+      .json({ message: error.message || "Failed to remove bookmark" });
   }
 };

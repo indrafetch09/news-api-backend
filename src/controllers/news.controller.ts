@@ -10,7 +10,9 @@ export const getKompasNews = async (_req: Request, res: Response) => {
     }
     return res.json(result);
   } catch (error: any) {
-    return res.status(500).json({ message: error.message || "Failed to fetch news" });
+    return res
+      .status(500)
+      .json({ message: error.message || "Failed to fetch news" });
   }
 };
 
@@ -24,7 +26,9 @@ export const getKompasCategoryNews = async (req: Request, res: Response) => {
     }
     return res.json(result);
   } catch (error: any) {
-    return res.status(500).json({ message: error.message || "Failed to fetch category news" });
+    return res
+      .status(500)
+      .json({ message: error.message || "Failed to fetch category news" });
   }
 };
 
@@ -32,7 +36,9 @@ export const getKompasNewsDetail = async (req: Request, res: Response) => {
   try {
     const { category, slug } = req.params;
     if (typeof category !== "string" || typeof slug !== "string") {
-      return res.status(400).json({ message: "Category and slug are required and must be strings" });
+      return res.status(400).json({
+        message: "Category and slug are required and must be strings",
+      });
     }
     const result = await getDetail(category, slug);
     res.setHeader("Content-Type", "application/json");
@@ -41,6 +47,8 @@ export const getKompasNewsDetail = async (req: Request, res: Response) => {
     }
     return res.json(result);
   } catch (error: any) {
-    return res.status(500).json({ message: error.message || "Failed to fetch news detail" });
+    return res
+      .status(500)
+      .json({ message: error.message || "Failed to fetch news detail" });
   }
 };

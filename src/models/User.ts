@@ -1,32 +1,8 @@
-import { Schema, model, Document } from "mongoose";
+import { Schema, model } from "mongoose";
 import bcrypt from "bcryptjs";
-
-export interface IBookmark {
-  title: string;
-  image_thumbnail?: string;
-  image_full?: string;
-  time: string;
-  link: string;
-  slug: string;
-  category: string;
-  createdAt: Date;
-}
-
-export interface IUserSettings {
-  theme: "light" | "dark" | "system";
-  notificationsEnabled: boolean;
-  preferredCategories: string[];
-}
-
-export interface IUser extends Document {
-  name: string;
-  email: string;
-  password?: string;
-  profileImage?: string;
-  bookmarks: IBookmark[];
-  settings: IUserSettings;
-  comparePassword(password: string): Promise<boolean>;
-}
+import { IBookmark } from "@/types/bookmark.type";
+import { IUserSettings } from "@/types/user-setting.type";
+import { IUser } from "@/types/user.type";
 
 const BookmarkSchema = new Schema<IBookmark>({
   title: { type: String, required: true },
@@ -39,42 +15,80 @@ const BookmarkSchema = new Schema<IBookmark>({
   createdAt: { type: Date, default: Date.now },
 });
 
-const UserSettingsSchema = new Schema<IUserSettings>({
-  theme: { type: String, enum: ["light", "dark", "system"], default: "light" },
-  notificationsEnabled: { type: Boolean, default: true },
-  preferredCategories: { type: [String], default: [] },
-}, { _id: false });
+const UserSettingsSchema = new Schema<IUserSettings>(
+  {
+    theme: {
+      type: String,
+      enum: ["light", "dark", "system"],
+      default: "light",
+    },
+    notificationsEnabled: {
+      type: Boolean,
+      default: true,
+    },
+    preferredCategories: {
+      type: [String],
+      default: [],
+    },
+  },
+  { _id: false },
+);
 
-const UserSchema = new Schema<IUser>({
-  name: { type: String, required: true, trim: true },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    lowercase: true,
-    trim: true,
+const UserSchema = new Schema<IUser>(
+  {
+    name: { type: String, required: true, trim: true },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    confirmPassword: {
+      type: String,
+      required: true,
+    },
+
+    profileImage: {
+      type: String,
+    },
+    bookmarks: {
+      type: [BookmarkSchema],
+      default: [],
+    },
+    settings: {
+      type: UserSettingsSchema,
+      default: () => ({}),
+    },
   },
-  password: { type: String, required: true },
-  profileImage: { type: String },
-  bookmarks: { type: [BookmarkSchema], default: [] },
-  settings: {
-    type: UserSettingsSchema,
-    default: () => ({}),
+  {
+    timestamps: true,
   },
-}, {
-  timestamps: true,
-});
+);
 
 UserSchema.pre("save", async function (this: IUser) {
   if (!this.isModified("password") || !this.password) {
     return;
   }
+  if (!this.isModified("confirmPassword") || !this.confirmPassword) {
+    return;
+  }
+
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
+
+  const confirmSalt = await bcrypt.genSalt(10);
+  this.confirmPassword = await bcrypt.hash(this.confirmPassword, confirmSalt);
 });
 
 // Compare password method
-UserSchema.methods.comparePassword = async function (password: string): Promise<boolean> {
+UserSchema.methods.comparePassword = async function (
+  password: string,
+): Promise<boolean> {
   if (!this.password) return false;
   return bcrypt.compare(password, this.password);
 };
