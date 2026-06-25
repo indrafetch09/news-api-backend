@@ -22,8 +22,14 @@ const UserSettingsSchema = new Schema<IUserSettings>(
       enum: ["light", "dark", "system"],
       default: "light",
     },
-    notificationsEnabled: { type: Boolean, default: true },
-    preferredCategories: { type: [String], default: [] },
+    notificationsEnabled: {
+      type: Boolean,
+      default: true,
+    },
+    preferredCategories: {
+      type: [String],
+      default: [],
+    },
   },
   { _id: false },
 );
@@ -38,9 +44,22 @@ const UserSchema = new Schema<IUser>(
       lowercase: true,
       trim: true,
     },
-    password: { type: String, required: true },
-    profileImage: { type: String },
-    bookmarks: { type: [BookmarkSchema], default: [] },
+    password: {
+      type: String,
+      required: true,
+    },
+    confirmPassword: {
+      type: String,
+      required: true,
+    },
+
+    profileImage: {
+      type: String,
+    },
+    bookmarks: {
+      type: [BookmarkSchema],
+      default: [],
+    },
     settings: {
       type: UserSettingsSchema,
       default: () => ({}),
@@ -55,8 +74,15 @@ UserSchema.pre("save", async function (this: IUser) {
   if (!this.isModified("password") || !this.password) {
     return;
   }
+  if (!this.isModified("confirmPassword") || !this.confirmPassword) {
+    return;
+  }
+
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
+
+  const confirmSalt = await bcrypt.genSalt(10);
+  this.confirmPassword = await bcrypt.hash(this.confirmPassword, confirmSalt);
 });
 
 // Compare password method

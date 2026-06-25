@@ -5,7 +5,8 @@ import { Document } from "mongoose";
 export interface IUser extends Document {
   name: string;
   email: string;
-  password?: string;
+  password: string;
+  confirmPassword: string;
   profileImage?: string;
   bookmarks: IBookmark[];
   settings: IUserSettings;
