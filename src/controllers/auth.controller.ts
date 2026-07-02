@@ -48,6 +48,8 @@ export const register = async (req: Request, res: Response) => {
         name: user.name,
         email: user.email,
         profileImage: user.profileImage,
+        dateOfBirth: user.dateOfBirth,
+        gender: user.gender,
         settings: user.settings,
       },
     });
