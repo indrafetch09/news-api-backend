@@ -70,7 +70,7 @@ mongoose
     process.exit(1);
   });
 
-app.listen(Number(PORT), "0.0.0.0", () => {
+app.listen(Number(PORT), () => {
   console.log(`API listening on http://0.0.0.0:${PORT}/`);
 });
 
