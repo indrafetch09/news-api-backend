@@ -58,26 +58,20 @@ app.get("/health", (_req: Request, res: Response) => {
 
 const PORT = process.env.PORT || 3000;
 
-// Connect to MongoDB
+// Connect to MongoDB and start the server
 const MONGODB_URI = process.env.MONGODB_URI;
-if (!MONGODB_URI) {
-  console.error("MONGODB_URI environment variable is not defined");
-} else {
-  mongoose
-    .connect(MONGODB_URI)
-    .then(() => {
-      console.log("Connected to MongoDB successfully");
-    })
-    .catch((err) => {
-      console.error("Database connection failed:", err);
-    });
-}
-
-// Only listen if not running on Vercel
-if (!process.env.VERCEL_URL) {
-  app.listen(Number(PORT), "0.0.0.0", () => {
-    console.log(`API listening on http://0.0.0.0:${PORT}/`);
+mongoose
+  .connect(`${MONGODB_URI}`)
+  .then(() => {
+    console.log("Connected to MongoDB successfully");
+  })
+  .catch((err) => {
+    console.error("Database connection failed:", err);
+    process.exit(1);
   });
-}
+
+app.listen(Number(PORT), "0.0.0.0", () => {
+  console.log(`API listening on http://0.0.0.0:${PORT}/`);
+});
 
 export default app;
