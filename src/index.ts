@@ -74,7 +74,7 @@ if (!MONGODB_URI) {
 }
 
 // Only listen if not running on Vercel
-if (!process.env.VERCEL) {
+if (!process.env.VERCEL_URL) {
   app.listen(Number(PORT), "0.0.0.0", () => {
     console.log(`API listening on http://0.0.0.0:${PORT}/`);
   });
