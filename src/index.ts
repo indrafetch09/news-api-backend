@@ -71,7 +71,7 @@ mongoose
   });
 
 app.listen(Number(PORT), () => {
-  console.log(`API listening on http://0.0.0.0:${PORT}/`);
+  console.log(`API listening on http://0.0.0.0:${PORT}`);
 });
 
 export default app;
