@@ -10,5 +10,7 @@ export interface IUser extends Document {
   profileImage?: string;
   bookmarks: IBookmark[];
   settings: IUserSettings;
+  dateOfBirth?: Date | null;
+  gender?: string;
   comparePassword(password: string): Promise<boolean>;
 }

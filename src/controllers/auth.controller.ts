@@ -5,10 +5,12 @@ import { User } from "../models/User";
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRES_IN = "30d"; // 30 days expiration for mobile session
 
+// Generate token
 const generateToken = (userId: string): string => {
   return jwt.sign({ userId }, `${JWT_SECRET}`, { expiresIn: JWT_EXPIRES_IN });
 };
 
+// POST: Register
 export const register = async (req: Request, res: Response) => {
   try {
     const { name, email, password, confirmPassword } = req.body;
@@ -48,6 +50,8 @@ export const register = async (req: Request, res: Response) => {
         name: user.name,
         email: user.email,
         profileImage: user.profileImage,
+        dateOfBirth: user.dateOfBirth,
+        gender: user.gender,
         settings: user.settings,
       },
     });
@@ -58,6 +62,7 @@ export const register = async (req: Request, res: Response) => {
   }
 };
 
+// POST: Login
 export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
@@ -88,6 +93,8 @@ export const login = async (req: Request, res: Response) => {
         name: user.name,
         email: user.email,
         profileImage: user.profileImage,
+        dateOfBirth: user.dateOfBirth,
+        gender: user.gender,
         settings: user.settings,
       },
     });
@@ -96,6 +103,7 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
+// POST: Logout
 export const logout = async (_req: Request, res: Response) => {
   return res.status(200).json({ message: "Logged out successfully" });
 };

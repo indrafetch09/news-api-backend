@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { User } from "../models/User";
 
+// Get user profile
 export const getProfile = async (req: Request, res: Response) => {
   try {
     const user = req.user!;
@@ -9,6 +10,8 @@ export const getProfile = async (req: Request, res: Response) => {
       name: user.name,
       email: user.email,
       profileImage: user.profileImage,
+      dateOfBirth: user.dateOfBirth,
+      gender: user.gender,
       settings: user.settings,
     });
   } catch (error: any) {
@@ -18,6 +21,7 @@ export const getProfile = async (req: Request, res: Response) => {
   }
 };
 
+// Update user profile
 export const updateProfile = async (req: Request, res: Response) => {
   try {
     const user = req.user!;
@@ -43,6 +47,8 @@ export const updateProfile = async (req: Request, res: Response) => {
         name: user.name,
         email: user.email,
         profileImage: user.profileImage,
+        dateOfBirth: user.dateOfBirth,
+        gender: user.gender,
         settings: user.settings,
       },
     });
@@ -53,6 +59,7 @@ export const updateProfile = async (req: Request, res: Response) => {
   }
 };
 
+// Get user settings
 export const getSettings = async (req: Request, res: Response) => {
   try {
     return res.status(200).json(req.user!.settings);
@@ -63,6 +70,7 @@ export const getSettings = async (req: Request, res: Response) => {
   }
 };
 
+// Update user settings
 export const updateSettings = async (req: Request, res: Response) => {
   try {
     const user = req.user!;
@@ -87,6 +95,7 @@ export const updateSettings = async (req: Request, res: Response) => {
   }
 };
 
+// Get user bookmarks
 export const getBookmarks = async (req: Request, res: Response) => {
   try {
     return res.status(200).json(req.user!.bookmarks);
@@ -97,6 +106,7 @@ export const getBookmarks = async (req: Request, res: Response) => {
   }
 };
 
+// Add a bookmark
 export const addBookmark = async (req: Request, res: Response) => {
   try {
     const user = req.user!;
@@ -104,11 +114,9 @@ export const addBookmark = async (req: Request, res: Response) => {
       req.body;
 
     if (!title || !time || !link || !slug || !category) {
-      return res
-        .status(400)
-        .json({
-          message: "Article title, time, link, slug, and category are required",
-        });
+      return res.status(400).json({
+        message: "Article title, time, link, slug, and category are required",
+      });
     }
 
     const isBookmarked = user.bookmarks.some((b) => b.slug === slug);
@@ -140,6 +148,7 @@ export const addBookmark = async (req: Request, res: Response) => {
   }
 };
 
+// Remove a bookmark
 export const removeBookmark = async (req: Request, res: Response) => {
   try {
     const user = req.user!;

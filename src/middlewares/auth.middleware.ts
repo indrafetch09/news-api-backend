@@ -4,6 +4,7 @@ import { User } from "../models/User";
 
 const JWT_SECRET = process.env.JWT_SECRET || "supersecretjwtkey";
 
+// Authenticate user via JWT
 export const authenticate = async (
   req: Request,
   res: Response,
@@ -11,7 +12,7 @@ export const authenticate = async (
 ) => {
   try {
     const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    if (!authHeader || !authHeader.startsWith("Bearer")) {
       return res.status(401).json({ message: "Authentication token required" });
     }
 

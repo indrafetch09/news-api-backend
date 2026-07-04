@@ -36,7 +36,20 @@ const UserSettingsSchema = new Schema<IUserSettings>(
 
 const UserSchema = new Schema<IUser>(
   {
-    name: { type: String, required: true, trim: true },
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    dateOfBirth: {
+      type: Date,
+      default: null,
+      required: false,
+    },
+    gender: {
+      type: String,
+      required: false,
+    },
     email: {
       type: String,
       required: true,
@@ -52,7 +65,6 @@ const UserSchema = new Schema<IUser>(
       type: String,
       required: true,
     },
-
     profileImage: {
       type: String,
     },
