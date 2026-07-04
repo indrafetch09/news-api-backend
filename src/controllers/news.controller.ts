@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { getData, getDetail } from "../scraper/kompas-scrape";
 
+// Get all news
 export const getKompasNews = async (_req: Request, res: Response) => {
   try {
     const result = await getData("");
@@ -16,6 +17,7 @@ export const getKompasNews = async (_req: Request, res: Response) => {
   }
 };
 
+// Get news by category
 export const getKompasCategoryNews = async (req: Request, res: Response) => {
   try {
     const { cat } = req.params;
@@ -32,6 +34,7 @@ export const getKompasCategoryNews = async (req: Request, res: Response) => {
   }
 };
 
+// Get news detail
 export const getKompasNewsDetail = async (req: Request, res: Response) => {
   try {
     const { category, slug } = req.params;

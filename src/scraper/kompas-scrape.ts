@@ -22,6 +22,7 @@ interface DetailArticle {
   media: { type: string; url: string }[];
 }
 
+// Parse date from "time ago" string
 function getDateFromTimeAgo(text: string): string {
   const fields = { hours: 0, minutes: 0, seconds: 0 };
   const patterns = [
@@ -50,6 +51,7 @@ function getDateFromTimeAgo(text: string): string {
     .format("YYYY-MM-DD");
 }
 
+// Get image source from element
 function getImgSrc(
   $: cheerio.CheerioAPI,
   parent: AnyNode,
@@ -60,6 +62,7 @@ function getImgSrc(
   return img.attr("data-src") ?? img.attr("src") ?? undefined;
 }
 
+// Clean image URL
 function cleanImg(url: string | undefined): string | undefined {
   return url?.replace(/crops.*data/, "data").replace("crops/", "");
 }
@@ -83,6 +86,7 @@ function extractSlug(link: string): string | null {
   }
 }
 
+// Format time string
 function formatTime(text: string): string {
   const t = text
     .trim()
