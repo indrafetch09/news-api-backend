@@ -1,11 +1,11 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+
+dotenv.config();
+
 import routes from "./routes";
 import mongoose from "mongoose";
-
-// Load environment variables
-dotenv.config();
 
 const app: express.Application = express();
 

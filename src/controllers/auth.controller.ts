@@ -2,12 +2,12 @@ import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { User } from "../models/User";
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET!;
 const JWT_EXPIRES_IN = "30d"; // 30 days expiration for mobile session
 
 // Generate token
 const generateToken = (userId: string): string => {
-  return jwt.sign({ userId }, `${JWT_SECRET}`, { expiresIn: JWT_EXPIRES_IN });
+  return jwt.sign({ userId }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
 };
 
 // POST: Register

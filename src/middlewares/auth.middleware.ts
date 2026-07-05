@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { User } from "../models/User";
 
-const JWT_SECRET = process.env.JWT_SECRET || "supersecretjwtkey";
+const JWT_SECRET = process.env.JWT_SECRET!;
 
 // Authenticate user via JWT
 export const authenticate = async (
@@ -16,7 +16,8 @@ export const authenticate = async (
       return res.status(401).json({ message: "Authentication token required" });
     }
 
-    const token = authHeader.split(" ")[1];
+    const token = authHeader.replace(/^Bearer\s+/i, "").trim();
+
     if (!token) {
       return res.status(401).json({ message: "Authentication token required" });
     }
@@ -30,7 +31,8 @@ export const authenticate = async (
 
     req.user = user;
     next();
-  } catch {
+  } catch (error: any) {
+    console.error("Auth middleware error:", error.name, error.message);
     return res.status(401).json({ message: "Invalid or expired token" });
   }
 };
