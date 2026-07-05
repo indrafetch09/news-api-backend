@@ -41,15 +41,6 @@ const UserSchema = new Schema<IUser>(
       required: true,
       trim: true,
     },
-    dateOfBirth: {
-      type: Date,
-      default: null,
-      required: false,
-    },
-    gender: {
-      type: String,
-      required: false,
-    },
     email: {
       type: String,
       required: true,
@@ -65,8 +56,20 @@ const UserSchema = new Schema<IUser>(
       type: String,
       required: true,
     },
+    dateOfBirth: {
+      type: Date,
+      default: null,
+      required: false,
+    },
+    gender: {
+      type: String,
+      default: null,
+      required: false,
+    },
     profileImage: {
       type: String,
+      default: null,
+      required: false,
     },
     bookmarks: {
       type: [BookmarkSchema],

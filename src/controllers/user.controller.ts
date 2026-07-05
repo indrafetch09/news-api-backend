@@ -10,8 +10,8 @@ export const getProfile = async (req: Request, res: Response) => {
       name: user.name,
       email: user.email,
       profileImage: user.profileImage,
-      dateOfBirth: user.dateOfBirth,
       gender: user.gender,
+      dateOfBirth: user.dateOfBirth,
       settings: user.settings,
     });
   } catch (error: any) {
@@ -25,7 +25,15 @@ export const getProfile = async (req: Request, res: Response) => {
 export const updateProfile = async (req: Request, res: Response) => {
   try {
     const user = req.user!;
-    const { name, email, password, profileImage } = req.body;
+    const {
+      name,
+      email,
+      password,
+      profileImage,
+      gender,
+      dateOfBirth,
+      settings,
+    } = req.body;
 
     if (name) user.name = name;
     if (email && email.toLowerCase() !== user.email) {
@@ -35,8 +43,11 @@ export const updateProfile = async (req: Request, res: Response) => {
       }
       user.email = email.toLowerCase();
     }
-    if (profileImage !== undefined) user.profileImage = profileImage;
     if (password) user.password = password; // pre-save hook handles hashing
+    if (profileImage !== undefined) user.profileImage = profileImage;
+    if (gender) user.gender = gender;
+    if (dateOfBirth) user.dateOfBirth = dateOfBirth;
+    if (settings) user.settings = settings;
 
     await user.save();
 
@@ -47,8 +58,8 @@ export const updateProfile = async (req: Request, res: Response) => {
         name: user.name,
         email: user.email,
         profileImage: user.profileImage,
-        dateOfBirth: user.dateOfBirth,
         gender: user.gender,
+        dateOfBirth: user.dateOfBirth,
         settings: user.settings,
       },
     });
