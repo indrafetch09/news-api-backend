@@ -56,6 +56,11 @@ app.get("/health", (_req: Request, res: Response) => {
   res.status(200).json({ status: "OK", data: "Alive and well!" });
 });
 
+// ponytail: catch-all 404 to prevent HTML responses
+app.use((_req, res) => {
+  res.status(404).json({ message: "Not Found" });
+});
+
 const PORT = process.env.PORT || 3000;
 
 // Connect to MongoDB and start the server
