@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import { User } from "../models/User";
 
 const JWT_SECRET = process.env.JWT_SECRET;
-const JWT_EXPIRES_IN = "30d"; // 30 days expiration for mobile session
+const JWT_EXPIRES_IN = "90d"; // 90 days expiration for mobile session
 
 // Generate token
 const generateToken = (userId: string): string => {
