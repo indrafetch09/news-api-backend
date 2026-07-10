@@ -176,3 +176,16 @@ export const removeBookmark = async (req: Request, res: Response) => {
       .json({ message: error.message || "Failed to remove bookmark" });
   }
 };
+
+// Delete user account
+export const deleteAccount = async (req: Request, res: Response) => {
+  try {
+    const user = req.user!;
+    await User.findByIdAndDelete(user._id);
+    return res.status(200).json({ message: "Account deleted successfully" });
+  } catch (error: any) {
+    return res
+      .status(500)
+      .json({ message: error.message || "Failed to delete account" });
+  }
+};

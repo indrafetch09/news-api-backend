@@ -7,6 +7,7 @@ import {
   getBookmarks,
   addBookmark,
   removeBookmark,
+  deleteAccount,
 } from "../controllers/user.controller";
 import { authenticate } from "../middlewares/auth.middleware";
 
@@ -17,6 +18,7 @@ router.use(authenticate);
 
 router.get("/profile", getProfile);
 router.put("/profile", updateProfile);
+router.delete("/profile", deleteAccount);
 
 router.get("/settings", getSettings);
 router.put("/settings", updateSettings);
