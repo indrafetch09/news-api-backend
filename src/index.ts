@@ -1,8 +1,9 @@
-import express, { Request, Response } from "express";
+import express, { Request, Response  } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import routes from "./routes";
 import mongoose from "mongoose";
+import path from 'node:path';
 
 // Load environment variables
 dotenv.config();
@@ -54,6 +55,14 @@ app.get("/", (_req: Request, res: Response) => {
 // Health Route
 app.get("/health", (_req: Request, res: Response) => {
   res.status(200).json({ status: "OK", data: "Alive and well!" });
+});
+
+app.get("/policy", (_req: Request, res: Response) => {
+  res.sendFile(path.join(__dirname, '/policy/policy.html'));
+});
+
+app.get("/terms", (_req: Request, res: Response) => {
+  res.sendFile(path.join(__dirname, '/policy/terms.html'));
 });
 
 const PORT = process.env.PORT || 3000;
