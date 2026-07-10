@@ -53,6 +53,8 @@ export const register = async (req: Request, res: Response) => {
         dateOfBirth: user.dateOfBirth,
         gender: user.gender,
         settings: user.settings,
+        // ponytail: return bookmarks to render immediately upon registration
+        bookmarks: user.bookmarks,
       },
     });
   } catch (error: any) {
@@ -96,6 +98,8 @@ export const login = async (req: Request, res: Response) => {
         dateOfBirth: user.dateOfBirth,
         gender: user.gender,
         settings: user.settings,
+        // ponytail: return bookmarks to render immediately upon login
+        bookmarks: user.bookmarks,
       },
     });
   } catch (error: any) {

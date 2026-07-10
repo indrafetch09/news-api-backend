@@ -13,6 +13,8 @@ export const getProfile = async (req: Request, res: Response) => {
       gender: user.gender,
       dateOfBirth: user.dateOfBirth,
       settings: user.settings,
+      // ponytail: return bookmarks to render immediately upon session bootstrap
+      bookmarks: user.bookmarks,
     });
   } catch (error: any) {
     return res
@@ -61,6 +63,7 @@ export const updateProfile = async (req: Request, res: Response) => {
         gender: user.gender,
         dateOfBirth: user.dateOfBirth,
         settings: user.settings,
+        bookmarks: user.bookmarks,
       },
     });
   } catch (error: any) {
