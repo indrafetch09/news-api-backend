@@ -1,38 +1,8 @@
 import { Schema, model } from "mongoose";
 import bcrypt from "bcryptjs";
-import { IBookmark } from "@/types/bookmark.type";
-import { IUserSettings } from "@/types/user-setting.type";
+import { BookmarkSchema } from "./Bookmark";
+import { UserSettingsSchema } from "./UserSettings";
 import { IUser } from "@/types/user.type";
-
-const BookmarkSchema = new Schema<IBookmark>({
-  title: { type: String, required: true },
-  image_thumbnail: { type: String },
-  image_full: { type: String },
-  time: { type: String, required: true },
-  link: { type: String, required: true },
-  slug: { type: String, required: true },
-  category: { type: String, required: true },
-  createdAt: { type: Date, default: Date.now },
-});
-
-const UserSettingsSchema = new Schema<IUserSettings>(
-  {
-    theme: {
-      type: String,
-      enum: ["light", "dark", "system"],
-      default: "light",
-    },
-    notificationsEnabled: {
-      type: Boolean,
-      default: true,
-    },
-    preferredCategories: {
-      type: [String],
-      default: [],
-    },
-  },
-  { _id: false },
-);
 
 const UserSchema = new Schema<IUser>(
   {
