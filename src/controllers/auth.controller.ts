@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { User } from "../models/User";
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET || "supersecretjwtkey";
 const JWT_EXPIRES_IN = "90d"; // 90 days expiration for mobile session
 
 // Generate token
