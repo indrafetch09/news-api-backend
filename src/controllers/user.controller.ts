@@ -13,6 +13,7 @@ export const getProfile = async (req: Request, res: Response) => {
       dateOfBirth: user.dateOfBirth,
       gender: user.gender,
       settings: user.settings,
+      bookmarks: user.bookmarks,
     });
   } catch (error: any) {
     return res
@@ -50,6 +51,7 @@ export const updateProfile = async (req: Request, res: Response) => {
         dateOfBirth: user.dateOfBirth,
         gender: user.gender,
         settings: user.settings,
+        bookmarks: user.bookmarks,
       },
     });
   } catch (error: any) {

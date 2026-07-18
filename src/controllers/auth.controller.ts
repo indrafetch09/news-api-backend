@@ -53,6 +53,7 @@ export const register = async (req: Request, res: Response) => {
         dateOfBirth: user.dateOfBirth,
         gender: user.gender,
         settings: user.settings,
+        bookmarks: user.bookmarks,
       },
     });
   } catch (error: any) {
@@ -96,6 +97,7 @@ export const login = async (req: Request, res: Response) => {
         dateOfBirth: user.dateOfBirth,
         gender: user.gender,
         settings: user.settings,
+        bookmarks: user.bookmarks,
       },
     });
   } catch (error: any) {
